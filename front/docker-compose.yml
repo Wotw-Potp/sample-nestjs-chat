@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  snc-front:
+    container_name: snc-front__container
+    image: node:lts-slim
+    volumes:
+      - type: bind
+        source: "./project"
+        target: "/var/www/app"
+    working_dir: "/var/www/app"
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    tty: true
+    env_file:
+      - "./.env"

@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  snc-api:
+    container_name: snc-api__container
+    image: snc-api__image
+    build:
+      context: "./docker/node/local"
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: "./project"
+        target: "/var/www/api"
+    ports:
+      - "${APP_PORT:-8000}:${APP_PORT:-8000}"
+    env_file:
+      - "./.env"
+    tty: true
+
+  snc-database:
+    container_name: snc-database__container
+    image: postgres
+    platform: linux/x86_64
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-database}
+    user: root
+    volumes:
+      - type: bind
+        source: "./docker/postgres/local/data"
+        target: "/var/lib/postgresql/data"
+
