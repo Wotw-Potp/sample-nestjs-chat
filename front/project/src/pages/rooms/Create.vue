@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { ErrorResponseType } from "../../@types/error-message"
-import { Room } from "../../@types/room"
+import { TRoom } from "../../@types/room"
 import ErrorMessages from "../../components/ErrorMessages.vue"
 import InputField from "../../components/InputField.vue"
 import ProgressButton from "../../components/ProgressButton.vue"
@@ -9,7 +9,7 @@ import { API_BASE_URL } from "../../libs/const"
 import { useRoomStore } from "../../store/room"
 
 interface CreateRoomParams {
-  name: Room["name"]
+  name: TRoom["name"]
 }
 
 const formData = ref<CreateRoomParams>({
@@ -37,7 +37,7 @@ async function submit(event: Event) {
         const err: ErrorResponseType = await res.json()
         errorMsgs.value.push(...err.message)
       } else {
-        const data: Room = await res.json()
+        const data: TRoom = await res.json()
         room.setter(data)
         location.hash = "#room-entered"
       }

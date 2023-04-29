@@ -1,18 +1,19 @@
 import { defineStore } from "pinia"
-import { Room } from "../@types/room"
+import { TRoom } from "../@types/room"
 
 export const useRoomStore = defineStore("room", {
-  state: (): Room => {
+  state: (): TRoom => {
     return {
       id: "",
       name: "",
+      messages: [],
     }
   },
   actions: {
     isVerified(): boolean {
       return this.id !== "" && this.name !== ""
     },
-    setter(room: Room) {
+    setter(room: TRoom) {
       this.$patch(room)
     },
   },

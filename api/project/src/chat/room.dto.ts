@@ -1,8 +1,10 @@
 import { IsString, IsUUID, Length } from 'class-validator';
+import { Message } from './message.dto';
 
 export type Room = {
   id: string;
   name: string;
+  messages: Message[];
 };
 
 export class CreateRoomDto {

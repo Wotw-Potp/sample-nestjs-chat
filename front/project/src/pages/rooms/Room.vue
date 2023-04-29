@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue"
-import type { Chat } from "../../@types/chat"
+import type { TChat } from "../../@types/chat"
 import InputArea from "../../components/InputArea.vue"
 import OverlayDialog from "../../components/OverlayDialog.vue"
 import { WSAdapter } from "../../libs/ws-adapter"
@@ -12,13 +12,13 @@ const room = useRoomStore(),
   user = useUserStore(),
   layoutState = useLayoutStateStore()
 
-const sendMessageData = ref<Chat>({
+const sendMessageData = ref<TChat>({
     message: "",
     sender: user.$state,
     roomId: room.id,
     postedAt: "",
   }),
-  chatMessages = ref<Chat[]>([])
+  chatMessages = ref<TChat[]>([])
 
 const socket = new WSAdapter(false)
 
@@ -26,8 +26,18 @@ onMounted(() => {
   if (!room.isVerified()) {
     location.href = "/"
   }
+  if (room.messages && room.messages.length) {
+    room.messages.forEach((message) => {
+      chatMessages.value.push({
+        message: message.content,
+        postedAt: message.createdAt,
+        sender: message.sender,
+        roomId: room.id,
+      })
+    })
+  }
   socket.connect()
-  socket.recieve(`emitMessage-Room_${room.id}`, (args: Chat) => {
+  socket.recieve(`emitMessage-Room_${room.id}`, (args: TChat) => {
     chatMessages.value.push(args)
   })
 })

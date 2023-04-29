@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { ErrorResponseType } from "../@types/error-message"
-import { Room } from "../@types/room"
-import { User } from "../@types/user"
+import { TRoom } from "../@types/room"
+import { TUser } from "../@types/user"
 import ErrorMessages from "../components/ErrorMessages.vue"
 import InputField from "../components/InputField.vue"
 import ProgressButton from "../components/ProgressButton.vue"
@@ -11,8 +11,8 @@ import { useRoomStore } from "../store/room"
 import { useUserStore } from "../store/user"
 
 interface EnterRoomParams {
-  userId: User["uid"]
-  roomId: Room["id"]
+  userId: TUser["uid"]
+  roomId: TRoom["id"]
 }
 
 const user = useUserStore()
@@ -43,7 +43,7 @@ async function submit(event: Event) {
         const err: ErrorResponseType = await res.json()
         errorMsgs.value.push(...err.message)
       } else {
-        const data: Room = await res.json()
+        const data: TRoom = await res.json()
         room.setter(data)
         moveTo("#room-entered")
       }

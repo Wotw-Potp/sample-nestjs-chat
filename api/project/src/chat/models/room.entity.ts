@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Message } from './message.entity';
 
 @Entity()
 export class Room extends BaseEntity {
@@ -7,4 +8,7 @@ export class Room extends BaseEntity {
 
   @Column('text')
   name: string;
+
+  @OneToMany(() => Message, (message) => message.room)
+  messages: Message[];
 }

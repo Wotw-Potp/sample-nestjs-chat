@@ -9,6 +9,10 @@ import {
 import { Server, Socket } from 'socket.io';
 import { configProviders } from 'src/config/config.providers';
 import { Chat } from './chat.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Message as MessageEntity } from './models/message.entity';
+import { Repository } from 'typeorm';
+import { Room as RoomEntity } from './models/room.entity';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -21,13 +25,33 @@ export class ChatGateway {
 
   private logger: Logger = new Logger('ChatGateway');
 
+  constructor(
+    @InjectRepository(RoomEntity)
+    private roomRepository: Repository<RoomEntity>,
+    @InjectRepository(MessageEntity)
+    private messageRepository: Repository<MessageEntity>,
+  ) {}
+
   @SubscribeMessage('sendMessage')
-  handleMessage(
+  async handleMessage(
     @MessageBody() payload: Chat,
     @ConnectedSocket() client: Socket,
   ) {
     this.logger.log({ wsEvent: client.id, ...payload });
     // save message
+    try {
+      const room = await this.roomRepository.findOneByOrFail({
+        id: payload.roomId,
+      });
+      const newMessage = this.messageRepository.create({
+        room: room,
+        sender: payload.sender,
+        content: payload.message,
+      });
+      await this.messageRepository.save(newMessage);
+    } catch (error) {
+      this.logger.error('save message error', error);
+    }
     // emit new message
     this.server.emit(`emitMessage-Room_${payload.roomId}`, {
       message: payload.message,

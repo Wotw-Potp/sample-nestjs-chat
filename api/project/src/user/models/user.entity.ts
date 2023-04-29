@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Message } from 'src/chat/models/message.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
@@ -13,4 +20,7 @@ export class User extends BaseEntity {
 
   @Column('text')
   name: string;
+
+  @OneToMany(() => Message, (message) => message.sender)
+  messages: Message[];
 }
