@@ -16,10 +16,12 @@ services:
     env_file:
       - "./.env"
     tty: true
+    depends_on:
+      - snc-database
 
   snc-database:
     container_name: snc-database__container
-    image: postgres
+    image: postgres:15
     platform: linux/x86_64
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
@@ -29,7 +31,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-database}
     user: root
     volumes:
-      - type: bind
-        source: "./docker/postgres/local/data"
+      - type: volume
+        source: snc-data-volume
         target: "/var/lib/postgresql/data"
 
+volumes:
+  snc-data-volume:

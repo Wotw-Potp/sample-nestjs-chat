@@ -1,9 +1,9 @@
-import { Room } from "./room"
-import { User } from "./user"
+import { TRoom } from "./room"
+import { TUser } from "./user"
 
-export type Chat = {
+export type TChat = {
   message: string
-  roomId: Room["id"]
-  sender: User
+  roomId: TRoom["id"]
+  sender: TUser
   postedAt: string
 }

@@ -1,8 +1,8 @@
 import { defineStore } from "pinia"
-import { User } from "../@types/user"
+import { TUser } from "../@types/user"
 
 export const useUserStore = defineStore("user", {
-  state: (): User => {
+  state: (): TUser => {
     return {
       uid: "",
       name: ""
@@ -12,7 +12,7 @@ export const useUserStore = defineStore("user", {
     registered() {
       return this.uid !== ""
     },
-    setter(user: User) {
+    setter(user: TUser) {
       this.$patch(user)
     },
   },

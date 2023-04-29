@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import {  ref } from "vue"
 import { ErrorResponseType } from "../@types/error-message"
-import type { User } from "../@types/user"
+import type { TUser } from "../@types/user"
 import ErrorMessages from "../components/ErrorMessages.vue"
 import InputField from "../components/InputField.vue"
 import ProgressButton from "../components/ProgressButton.vue"
@@ -9,8 +9,8 @@ import { API_BASE_URL } from "../libs/const"
 import { useUserStore } from "../store/user"
 
 interface UserRegisterResponse {
-  uid: User["uid"]
-  name: User["name"]
+  uid: TUser["uid"]
+  name: TUser["name"]
 }
 
 const formData = ref({
